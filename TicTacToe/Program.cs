@@ -10,9 +10,7 @@ namespace TicTacToe
     internal class Program
     {
         static char[] spaces = new char[] { '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-        static int player = 1;
-        static int choice;
-        static int flag;
+        static char player = 'X';
 
         /// <summary>
         /// Draws the game board
@@ -30,15 +28,15 @@ namespace TicTacToe
             Console.WriteLine("     |     |     ");
         }
 
-        static bool CheckLine(int a, int b, int c)
+        static bool CheckLine(int index1, int index2, int index3)
         {
-            return (spaces[a] == spaces[b] && spaces[b] == spaces[c]);
+            return (spaces[index1] == spaces[index2] && spaces[index2] == spaces[index3]);
         }
         static bool CheckTie()
         {
             int check = 0;
-            for (int i = 0; i < spaces.Length; i++) {
-                if(spaces[i].ToString() != (i + 1).ToString())
+            for (int index = 0; index < spaces.Length; index++) {
+                if(spaces[index].ToString() != (index + 1).ToString())
                 {
                     check++;
                 }
@@ -62,19 +60,34 @@ namespace TicTacToe
             else { return 0; }
         }
 
-        static void DrawSign(int pos, char sign)
+        static void ChangePlayer()
         {
-            spaces[pos] = sign;
+            if (player == 'X')
+            {
+                player = 'O';
+            }
+            else
+            {
+                player = 'X';
+            }
+        }
+
+        static void DrawSign(int pos)
+        {
+            spaces[pos] = player;
         }
 
         static void Main(string[] args)
         {
+            int choice;
+            int flag;
+
             do
             {
                 Console.Clear();
                 Console.WriteLine("Player 1 : X and Player 2 : O" + "\n");
 
-                if (player % 2 == 0)
+                if (player=='O')
                 {
                     Console.WriteLine("Player 2's turn");
                 }
@@ -89,15 +102,8 @@ namespace TicTacToe
 
                 if (spaces[choice] != 'X' && spaces[choice] != 'O')
                 {
-                    if (player % 2 == 0)
-                    {
-                        DrawSign(choice, 'O');
-                    }
-                    else
-                    {
-                        DrawSign(choice, 'X');
-                    }
-                    player++;
+                    DrawSign(choice);
+                    ChangePlayer();
                 }
                 else
                 {
@@ -113,7 +119,8 @@ namespace TicTacToe
 
             if (flag == 1)
             {
-                Console.WriteLine("Player {0} has won!", (player%2)+1);
+                ChangePlayer();
+                Console.WriteLine("Player {0} has won!", player);
             }
             else { Console.WriteLine("Tie game"); }
 
